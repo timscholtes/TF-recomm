@@ -16,6 +16,7 @@ def inference_svd(user_batch, item_batch, user_num, item_num, dim=5, device="/cp
         embd_item = tf.nn.embedding_lookup(w_item, item_batch, name="embedding_item")
     with tf.device(device):
         infer = tf.reduce_sum(tf.multiply(embd_user, embd_item), 1)
+        # infer = tf.reduce_sum(tf.multiply(embd_user, embd_item), 1, name="svd_inference")
         infer = tf.add(infer, bias_global)
         infer = tf.add(infer, bias_user)
         infer = tf.add(infer, bias_item, name="svd_inference")
@@ -23,7 +24,7 @@ def inference_svd(user_batch, item_batch, user_num, item_num, dim=5, device="/cp
     return infer, regularizer
 
 
-def optimization(infer, regularizer, rate_batch, learning_rate=0.001, reg=0.1, device="/cpu:0"):
+def optimization(infer, regularizer, rate_batch, learning_rate=.001, reg=0.05, device="/cpu:0"):
     global_step = tf.train.get_global_step()
     assert global_step is not None
     with tf.device(device):
