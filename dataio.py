@@ -4,7 +4,7 @@ import pandas as pd
 #import boto3
 from os import listdir
 from os.path import isfile, join
-import fastparquet as fp
+#import fastparquet as fp
 
 def read_process(filname, sep="\t"):
     col_names = ["user", "item", "rate", "st"]
@@ -43,14 +43,54 @@ def read_process(filname, sep="\t"):
 #             if not os.path.exists(s3_object):
 #                 os.makedirs(s3_object)
 
+# def read_process4(N = 15):
+    
+#     onlyfiles = [f for f in listdir('data/') if isfile(join('data/', f))]
+#     df = []
+#     for f in onlyfiles[:N]:
+#         print('loading:', f)
+#         pfile = fp.ParquetFile('data/'+f)
+#         df.append(pfile.to_pandas())
+#     df = pd.concat(df,axis=0)
+
+#     for col in ("userIndex", "annotationIndex"):
+#          df[col] = df[col].astype(np.int32)
+#     print(df.head())
+#     #print(len(df))
+#     print('sorting')
+
+#     #uidDict = {i:x for i,x in enumerate(list(set(df['userIndex'])))}
+#     #iidDict = {i:x for i,x in enumerate(list(set(df['annotationIndex'])))}
+#     print('making Dicts:')
+#     uidDictRev = {x:i for i,x in enumerate(list(set(df['userIndex'])))}
+#     iidDictRev = {x:i for i,x in enumerate(list(set(df['annotationIndex'])))}
+
+#     print('reindexing datasets:')
+#     print('annotations...')
+#     df['annotationIndex'] = [iidDictRev[x] for x in df['annotationIndex']]
+#     print('users...')
+#     df['userIndex'] = [uidDictRev[x] for x in df['userIndex']]
+#     # print(len(set(df['annotationIndex'])))
+#     # print(len(set(df['userIndex'])))
+#     print('done sorting')
+
+#     df["weight"] = df["weight"].astype(np.float32)
+#     df['weight'] = df['weight'] - np.mean(df['weight'])
+#     df['weight'] = df['weight']/np.std(df['weight'])
+
+
+#     print(df.head())
+#     return df
+
+
 def read_process4(N = 15):
     
     onlyfiles = [f for f in listdir('data/') if isfile(join('data/', f))]
     df = []
     for f in onlyfiles[:N]:
         print('loading:', f)
-        pfile = fp.ParquetFile('data/'+f)
-        df.append(pfile.to_pandas())
+        #pfile = fp.ParquetFile('data/'+f)
+        df.append(pd.read_csv('data/'+f))
     df = pd.concat(df,axis=0)
 
     for col in ("userIndex", "annotationIndex"):
