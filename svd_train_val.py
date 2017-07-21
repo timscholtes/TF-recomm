@@ -11,12 +11,12 @@ import ops
 
 np.random.seed(13575)
 
-BATCH_SIZE = 1000
+BATCH_SIZE = 100000
 #USER_NUM = 6040
 #USER_NUM = 10250996
 #ITEM_NUM = 3952
 #ITEM_NUM = 48582
-DIM = 10
+DIM = 40
 EPOCH_MAX = 100
 DEVICE = "/cpu:0"
 
@@ -30,7 +30,7 @@ def make_scalar_summary(name, val):
 
 
 def get_data(N):
-    df = dataio.read_process4(N)
+    df,means,sds = dataio.read_process4(N)
     user_num = len(set(df['userIndex']))
     item_num = len(set(df['annotationIndex']))
     rows = len(df)
@@ -61,7 +61,7 @@ def svd(train, test, user_num, item_num):
     infer, regularizer = ops.inference_svd(user_batch, item_batch, user_num=user_num, item_num=item_num, dim=DIM,
                                            device=DEVICE)
     global_step = tf.contrib.framework.get_or_create_global_step()
-    _, train_op = ops.optimization(infer, regularizer, rate_batch, learning_rate=0.05, reg=0.05, device=DEVICE)
+    _, train_op = ops.optimization(infer, regularizer, rate_batch, learning_rate=0.005, reg=0.01, device=DEVICE)
 
     init_op = tf.global_variables_initializer()
     with tf.Session() as sess:
@@ -98,6 +98,6 @@ def svd(train, test, user_num, item_num):
 
 
 if __name__ == '__main__':
-    df_train, df_test, user_num, item_num = get_data(N=10)
+    df_train, df_test, user_num, item_num = get_data(N=500)
     svd(df_train, df_test, user_num, item_num)
     print("Done!")

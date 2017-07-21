@@ -114,13 +114,15 @@ def read_process4(N = 15):
     # print(len(set(df['userIndex'])))
     print('done sorting')
 
+    means = np.mean(df['weight'])
+    sds = np.std(df['weight'])
     df["weight"] = df["weight"].astype(np.float32)
-    df['weight'] = df['weight'] - np.mean(df['weight'])
-    df['weight'] = df['weight']/np.std(df['weight'])
+    df['weight'] = df['weight'] - means
+    df['weight'] = df['weight']/sds
 
 
     print(df.head())
-    return df
+    return df, means,sds
 
 
 
