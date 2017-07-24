@@ -18,7 +18,7 @@ BATCH_SIZE = 100000
 #ITEM_NUM = 48582
 DIM = 40
 EPOCH_MAX = 100
-DEVICE = "/cpu:0"
+DEVICE = "/gpu:0"
 
 
 # def clip(x):
