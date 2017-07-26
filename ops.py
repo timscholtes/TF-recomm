@@ -16,7 +16,8 @@ def inference_svd(user_batch, item_batch, user_num, item_num, dim=5, device="/cp
     return infer, regularizer
 
 
-def optimization(infer, regularizer, rate_batch, learning_rate=.001, reg=0.05, device="/cpu:0"):
+def optimization(infer, regularizer, rate_batch, learning_rate=.001,
+ reg=0.05, device="/cpu:0"):
     global_step = tf.train.get_global_step()
     assert global_step is not None
     with tf.device(device):
@@ -24,7 +25,8 @@ def optimization(infer, regularizer, rate_batch, learning_rate=.001, reg=0.05, d
         penalty = tf.constant(reg, dtype=tf.float32, shape=[], name="l2")
         cost = tf.add(cost_l2, tf.multiply(regularizer, penalty))
         train_op = tf.train.MomentumOptimizer(learning_rate,0.9).minimize(cost, global_step=global_step)
-    return cost, train_op
+        #train_op = tf.train.GradientDescentOptimizer(learning_rate).minimize(cost)
+    return train_op, cost
 
 
 def embedder(user_batch, item_batch, user_num, item_num, dim=5):

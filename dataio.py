@@ -90,7 +90,9 @@ def read_process4(N = 15):
     for f in onlyfiles[:N]:
         print('loading:', f)
         #pfile = fp.ParquetFile('data/'+f)
-        df.append(pd.read_csv('data/'+f))
+        tmp = pd.read_csv('data/'+f)
+        tmp.columns = ['userIndex','annotationIndex','weight']
+        df.append(tmp)
     df = pd.concat(df,axis=0)
 
     for col in ("userIndex", "annotationIndex"):
